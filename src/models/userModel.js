@@ -9,9 +9,9 @@ const userEmailExists = async (email) => {
   return user !== null;
 };
 
-const createUser = async ({ name, email, password, role }) => connection.getConnection()
+const createUser = async ({ name, email, role }) => connection.getConnection()
 .then((db) => db.collection('users')
-.insertOne({ name, email, password, role }))
+.insertOne({ name, email, role }))
 .then((result) => result.ops[0]);
 
 module.exports = {
