@@ -15,7 +15,7 @@ const createUser = async (req, res) => {
      { name, email, password, role },
    );
 
-  return res.status(status).json(message);
+  return res.status(status).json({ ...message });
 };
 
 module.exports = {
