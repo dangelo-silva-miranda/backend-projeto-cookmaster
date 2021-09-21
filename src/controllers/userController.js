@@ -12,7 +12,7 @@ const createUser = async (req, res) => {
   const role = (path.includes('admin')) ? 'admin' : 'user';
   
   const { status, message } = await userService.createUser(
-     { name, email, password, role },
+    { name, email, password, role },
    );
 
   return res.status(status).json({ ...message });
