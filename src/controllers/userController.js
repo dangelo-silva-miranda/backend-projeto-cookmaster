@@ -6,13 +6,13 @@ const userService = require('../services/userService');
 
 */
 const createUser = async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
   const { path } = req;
   
   const role = (path.includes('admin')) ? 'admin' : 'user';
   
   const { status, message } = await userService.createUser(
-     { name, email, role },
+    { name, email, password, role },
    );
 
   return res.status(status).json({ ...message });
