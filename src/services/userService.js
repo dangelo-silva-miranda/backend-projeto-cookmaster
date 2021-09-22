@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 const userModel = require('../models/userModel');
 
-const createUser = async ({ name, email, password, role }) => {
+const createUser = async ({ name, email, role }) => {
   const user = await userModel.createUser(
-    { name, email, password, role },
+    { name, email, role },
   );
 
   return {
