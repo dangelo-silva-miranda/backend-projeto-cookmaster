@@ -9,6 +9,20 @@ const userEmailExists = async (email) => {
   return user !== null;
 };
 
+const getPasswordByEmail = async (email) => {
+  const { password } = await connection.getConnection()
+  .then((db) => db.collection('users').findOne({ email }, { _id: 0, password: 1 }));
+  
+  return password;
+};
+
+const getIdAndRoleByEmail = async (email) => {
+  const idAndRole = await connection.getConnection()
+    .then((db) => db.collection('users')
+      .findOne({ email }, { id: '$_id', role: 1, _id: 0 }));
+  return idAndRole;
+};
+
 /*
   Material consultado sobre como remover propriedade de objeto
   https://www.w3schools.com/howto/howto_js_remove_property_object.asp
@@ -40,4 +54,6 @@ const createUser = async ({ name, email, password, role }) => connection.getConn
 module.exports = {
   userEmailExists,
   createUser,
+  getPasswordByEmail,
+  getIdAndRoleByEmail,
 };
