@@ -56,7 +56,7 @@ const validateLoginEmail = async (req, res, next) => {
   const emailPattern = /^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i;
   if (!emailPattern.test(email) || !await userModel.userEmailExists(email)) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'Incorrect email or password',
+      message: 'Incorrect username or password',
     });
   }
 
@@ -75,7 +75,7 @@ const validateLoginPassword = async (req, res, next) => {
   const dbPassword = await userModel.getPasswordByEmail(email);
   if (password !== dbPassword) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'Incorrect email or password',
+      message: 'Incorrect username or password',
     });
   }
 
