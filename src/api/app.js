@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const { loginRouter } = require('../routers/loginRouter');
 const { userRouter } = require('../routers/userRouter');
 
 const app = express();
@@ -13,5 +14,8 @@ app.get('/', (request, response) => {
 
 /* Todas as rotas com /users/<alguma-coisa> entram aqui e vão para o roteador */
 app.use('/users', userRouter);
+
+/* Todas as rotas com /login/<alguma-coisa> entram aqui e vão para o roteador */
+app.use('/login', loginRouter);
 
 module.exports = app;
