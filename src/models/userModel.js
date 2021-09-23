@@ -32,23 +32,31 @@ const getIdAndRoleByEmail = async (email) => {
   https://forum.kirupa.com/t/js-tip-of-the-day-the-underscore-convention/643076
 */
 const createUser = async ({ name, email, password, role }) => connection.getConnection()
-.then((db) => db.collection('users')
-.insertOne({ name, email, password, role }))
-.then(({ ops: [result] }) => {
-  const res = { ...result };
-  delete res.password;
-  return res;
-});
-/*
-  Não funcionou por causa de uma propriedade privada (_id) que não tem método para acessá-la. Como resolver?
-  .then(({ ops: [result] }) => (
-  { 
+  .then((db) => db.collection('users')
+    .insertOne({ name, email, password, role }))
+  .then(({ insertedId, ops: [result] }) => ({
     name: result.name, 
     email: result.email, 
     role: result.role,
-    _id: result['_id '],
-  }
-));
+    _id: insertedId,
+  }));
+
+/*
+  Não funcionou por causa de uma propriedade privada (_id) que não tem método para acessá-la. Como resolver?
+  // versão 1 - excluir apenas a chave desnecessária pois password não está encriptado como um app real
+  .then(({ ops: [result] }) => {
+    const res = { ...result };
+    delete res.password;
+    return res;
+  });
+
+  // versão 2 - montar objeto com as chaves desejadas e usando insertedId para recuperar _id
+  .then(({ insertedId, ops: [result] }) => ({ 
+    name: result.name, 
+    email: result.email, 
+    role: result.role,
+    _id: result.insertedId.toString(),
+  }));  
 */
 
 module.exports = {
