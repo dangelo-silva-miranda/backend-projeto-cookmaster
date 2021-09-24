@@ -11,7 +11,8 @@ const userEmailExists = async (email) => {
 
 const getPasswordByEmail = async (email) => {
   const { password } = await connection.getConnection()
-  .then((db) => db.collection('users').findOne({ email }, { _id: 0, password: 1 }));
+  .then((db) => db.collection('users')
+    .findOne({ email }, { projection: { password: 1, _id: 0 } }));
   
   return password;
 };
@@ -19,8 +20,20 @@ const getPasswordByEmail = async (email) => {
 const getIdAndRoleByEmail = async (email) => {
   const idAndRole = await connection.getConnection()
     .then((db) => db.collection('users')
-      .findOne({ email }, { id: '$_id', role: 1, _id: 0 }));
+      .findOne({ email }, { projection: { id: '$_id', role: 1, _id: 0 } }));
+      // .findOne({ email }).project({ id: '$_id', role: 1, _id: 0 }));
+
   return idAndRole;
+  /*
+    O material consultado sugere .project , mas não funciona. Pq?
+    https://stackoverflow.com/a/51732851
+    .findOne({ email }).project({ id: '$_id', role: 1, _id: 0 })
+
+    O material consultado sugere projection e funciona
+    https://stackoverflow.com/a/50802269
+    http://mongodb.github.io/node-mongodb-native/3.5/api/Collection.html#findOne
+    .findOne({ email }, { projection: { id: '$_id', role: 1, _id: 0 } })
+  */
 };
 
 /*
