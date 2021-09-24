@@ -1,12 +1,12 @@
 const loginService = require('../services/loginService');
 
-const createToken = (req, res) => {
-  const { email } = req.body;
+const createToken = async (req, res) => {
+  const { email, password } = req.body;
 
-  const { status, message } = loginService.createToken(
-    { email },
+  const { status, message } = await loginService.createToken(
+    { email, password },
    );
-
+    
    return res.status(status).json(message);
 };
 

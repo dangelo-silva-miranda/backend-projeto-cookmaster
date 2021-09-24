@@ -1,12 +1,12 @@
 const { StatusCodes } = require('http-status-codes');
-const userModel = require('../models/userModel');
+const { MessageCodes } = require('../helpers/constants');
 
 const validateName = (req, res, next) => {
   const { name = '' } = req.body;
 
   if (name === '') {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Invalid entries. Try again.',
+      message: MessageCodes.INVALID_ENTRIES,
     });
   }
 
@@ -19,13 +19,7 @@ const validateEmail = async (req, res, next) => {
   const emailPattern = /^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i;
   if (!emailPattern.test(email)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Invalid entries. Try again.',
-    });
-  }
-  
-  if (await userModel.userEmailExists(email)) {
-    return res.status(StatusCodes.CONFLICT).json({
-      message: 'Email already registered',
+      message: MessageCodes.INVALID_ENTRIES,
     });
   }
 
@@ -37,7 +31,7 @@ const validatePassword = (req, res, next) => {
 
   if (password === '') {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Invalid entries. Try again.',
+      message: MessageCodes.INVALID_ENTRIES,
     });
   }
 
@@ -49,14 +43,14 @@ const validateLoginEmail = async (req, res, next) => {
 
   if (email === '') {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'All fields must be filled',
+      message: MessageCodes.REQUIRED_FIELDS,
     });
   }
 
   const emailPattern = /^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i;
-  if (!emailPattern.test(email) || !await userModel.userEmailExists(email)) {
+  if (!emailPattern.test(email)) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'Incorrect username or password',
+      message: MessageCodes.INCORRECT_USERNAME_PASSWORD,
     });
   }
 
@@ -64,18 +58,11 @@ const validateLoginEmail = async (req, res, next) => {
 };
 
 const validateLoginPassword = async (req, res, next) => {
-  const { email, password = '' } = req.body;
+  const { password = '' } = req.body;
 
   if (password === '') {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'All fields must be filled',
-    });
-  }
-
-  const dbPassword = await userModel.getPasswordByEmail(email);
-  if (password !== dbPassword) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'Incorrect username or password',
+      message: MessageCodes.REQUIRED_FIELDS,
     });
   }
 
