@@ -5,7 +5,6 @@ const connection = require('./connection');
 const userEmailExists = async (email) => {
   const user = await connection.getConnection()
   .then((db) => db.collection('users').findOne({ email }));
-
   return user !== null;
 };
 
