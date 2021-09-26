@@ -32,6 +32,16 @@ const createRecipe = async (
   };
 };
 
+const getAllRecipes = async () => {
+  const recipes = await recipeModel.getAllRecipes();
+
+  return {
+    status: StatusCodes.OK,
+    message: recipes,
+  };
+};
+
 module.exports = {
   createRecipe,
+  getAllRecipes,
 };
