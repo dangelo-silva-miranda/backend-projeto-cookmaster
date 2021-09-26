@@ -40,8 +40,32 @@ const getRecipeById = async (id) => {
       .findOne({ _id: ObjectId(id) }, { projection: { image: 0 } }));
 };
 
+/*
+  Material consultado sobre findOneAndUpdate e returnOriginal
+  https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
+  https://stackoverflow.com/a/63683144
+*/
+const updateRecipeById = async ({ id, name, ingredients, preparation }) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  return connection.getConnection()
+    .then((db) => db.collection('recipes')
+      .findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $set: { name, ingredients, preparation } },
+        { returnOriginal: false,
+          projection: { image: 0 }, 
+        },
+      ))
+    .then(({ value }) => value);
+};
+
 module.exports = {
+  isRecipeFromUser,
   createRecipe,
   getAllRecipes,
   getRecipeById,
+  updateRecipeById,
 };
