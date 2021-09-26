@@ -19,9 +19,9 @@ const getPasswordByEmail = async (email) => {
 const getIdAndRoleByEmail = async (email) => {
   const idAndRole = await connection.getConnection()
     .then((db) => db.collection('users')
-      .findOne({ email }, { projection: { id: '$_id', role: 1, _id: 0 } }));
+      .findOne({ email }, { projection: { id: { $toString: '$_id' }, role: 1, _id: 0 } }));
       // .findOne({ email }).project({ id: '$_id', role: 1, _id: 0 }));
-
+  console.log(idAndRole);
   return idAndRole;
   /*
     O material consultado sugere .project , mas não funciona. Pq?

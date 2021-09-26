@@ -5,6 +5,10 @@ const { recipeRouter } = require('../routers/recipeRouter');
 const { userRouter } = require('../routers/userRouter');
 
 const app = express();
+/*
+  Material consultado sobre bodyParser.json vs bodyParser.urlencoded
+  https://stackoverflow.com/questions/55558402/what-is-the-meaning-of-bodyparser-urlencoded-extended-true-and-bodypar
+*/
 app.use(bodyParser.json());
 
 // Não remover esse end-point, ele é necessário para o avaliador

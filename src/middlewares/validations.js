@@ -1,10 +1,35 @@
 const { StatusCodes } = require('http-status-codes');
-const { MessageCodes } = require('../helpers/constants');
+const jwt = require('jsonwebtoken');
+const { MessageCodes, SECRET } = require('../helpers/constants');
 
 const validateName = (req, res, next) => {
   const { name = '' } = req.body;
 
   if (name === '') {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: MessageCodes.INVALID_ENTRIES,
+    });
+  }
+
+  next();
+};
+
+const validateIngredients = (req, res, next) => {
+  const { ingredients = '' } = req.body;
+
+  if (ingredients === '') {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: MessageCodes.INVALID_ENTRIES,
+    });
+  }
+
+  next();
+};
+
+const validatePreparation = (req, res, next) => {
+  const { preparation = '' } = req.body;
+
+  if (preparation === '') {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: MessageCodes.INVALID_ENTRIES,
     });
@@ -69,10 +94,48 @@ const validateLoginPassword = async (req, res, next) => {
   next();
 };
 
+const validateAuth = (req, res, next) => {
+  const token = req.headers.authorization || '';
+
+  if (token === '') {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: MessageCodes.MISSING_AUTH_TOKEN,
+    });
+  }
+
+  next();
+};
+
+const validateJWT = async (req, res, next) => {
+  const token = req.headers.authorization || '';
+  
+  try {
+    /* 
+      Usa o método verify e a chave secreta para validar e decodificar o JWT.
+    */
+    const { data } = jwt.verify(token, SECRET);
+
+    req.user = data;
+
+    next();
+  } catch (error) {
+    // Mensagem informando que o token é inválido (expirou ou adulterado)
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: MessageCodes.JWT_MALFORMED,
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   validateName,
+  validateIngredients,
+  validatePreparation,
   validateEmail,
   validatePassword,
   validateLoginEmail,
   validateLoginPassword,
+  validateAuth,
+  validateJWT,
 };
