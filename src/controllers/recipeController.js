@@ -8,7 +8,7 @@ const createRecipe = async (req, res) => {
     { name, ingredients, preparation, user },
   );
 
-  return res.status(status).json('DEU BOM');
+  return res.status(status).json({ ...message });
 };
 
 module.exports = {

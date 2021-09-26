@@ -114,7 +114,6 @@ const validateJWT = async (req, res, next) => {
       Usa o método verify e a chave secreta para validar e decodificar o JWT.
     */
     const { data } = jwt.verify(token, SECRET);
-
     req.user = data;
 
     next();
@@ -124,8 +123,6 @@ const validateJWT = async (req, res, next) => {
       message: MessageCodes.JWT_MALFORMED,
     });
   }
-
-  next();
 };
 
 module.exports = {

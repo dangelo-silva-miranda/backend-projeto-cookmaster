@@ -16,12 +16,16 @@ const getPasswordByEmail = async (email) => {
   return password;
 };
 
+/*
+  Material consultado sobre $toString dentro de projection
+  https://www.titanwolf.org/Network/q/97cbd2ef-6014-40f2-aecb-a74d1a617aa4/y
+*/
 const getIdAndRoleByEmail = async (email) => {
   const idAndRole = await connection.getConnection()
     .then((db) => db.collection('users')
       .findOne({ email }, { projection: { id: { $toString: '$_id' }, role: 1, _id: 0 } }));
       // .findOne({ email }).project({ id: '$_id', role: 1, _id: 0 }));
-  console.log(idAndRole);
+  
   return idAndRole;
   /*
     O material consultado sugere .project , mas não funciona. Pq?

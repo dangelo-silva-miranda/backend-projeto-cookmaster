@@ -21,10 +21,11 @@ const createRecipe = async (
       message: ['non-existent user.'],
     };
   }
+  
   const recipe = await recipeModel.createRecipe(
     { name, ingredients, preparation, userId, image },
   );
-  console.log(recipe);
+  
   return {
     status: StatusCodes.CREATED,
     message: { recipe },
