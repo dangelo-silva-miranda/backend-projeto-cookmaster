@@ -90,9 +90,32 @@ const updateRecipeById = async ({ id, name, ingredients, preparation, user }) =>
   return { status: StatusCodes.OK, message: recipe };  
 };
 
+const removeRecipeById = async ({ id, user }) => {
+  const { id: userId, role } = user;
+
+  // Não existe usuário no DB com essas informações
+  if (!userExists(user)) {
+    return {
+      status: StatusCodes.UNAUTHORIZED,
+      message: { message: 'non-existent user.' },
+    };
+  }
+  
+  const isRecipeFromUser = await recipeModel.isRecipeFromUser({ id, userId });
+  if (role !== 'admin' && !isRecipeFromUser) {
+    return { status: StatusCodes.FORBIDDEN, 
+      message: { message: 'not authorized to perform the requested action' } };
+  }
+
+  await recipeModel.removeRecipeById(id);
+  
+  return { status: StatusCodes.NO_CONTENT }; 
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
+  removeRecipeById,
 };
