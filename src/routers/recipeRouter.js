@@ -10,6 +10,8 @@ recipeRouter.post('/',
   [validateName, validateIngredients, validatePreparation, validateJWT], 
   recipeController.createRecipe);
 
+recipeRouter.get('/', recipeController.getAllRecipes);
+
 module.exports = {
   recipeRouter,
 };
