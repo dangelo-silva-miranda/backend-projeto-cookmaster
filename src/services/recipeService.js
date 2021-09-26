@@ -18,7 +18,7 @@ const createRecipe = async (
     // console.log(`userId: ${typeof userId} | userDB.id: ${typeof userDB.id}`);
     return {
       status: StatusCodes.UNAUTHORIZED,
-      message: ['non-existent user.'],
+      message: { message: 'non-existent user.' },
     };
   }
 
