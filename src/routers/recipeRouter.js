@@ -17,6 +17,8 @@ recipeRouter.get('/:id', recipeController.getRecipeById);
 recipeRouter.put('/:id', [validateAuth, validateJWT, validateName, 
   validateIngredients, validatePreparation], recipeController.updateRecipeById);
 
+recipeRouter.delete('/:id', [validateAuth, validateJWT], recipeController.removeRecipeById);
+
 module.exports = {
   recipeRouter,
 };
