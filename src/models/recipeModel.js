@@ -14,7 +14,7 @@ const createRecipe = async ({ name, ingredients, preparation, userId, image }) =
     }))
   );
 
-const getAllRecipes = () => connection.getConnection()
+const getAllRecipes = async () => connection.getConnection()
   .then((db) => db.collection('recipes')
     .find().toArray());
 
