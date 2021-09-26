@@ -15,13 +15,13 @@ const createRecipe = async (
   
   // Não existe usuário no DB com essas informações
   if (!userDB || userId !== userDB.id || role !== userDB.role) {
-    console.log(`userId: ${typeof userId} | userDB.id: ${typeof userDB.id}`);
+    // console.log(`userId: ${typeof userId} | userDB.id: ${typeof userDB.id}`);
     return {
       status: StatusCodes.UNAUTHORIZED,
       message: ['non-existent user.'],
     };
   }
-  
+
   const recipe = await recipeModel.createRecipe(
     { name, ingredients, preparation, userId, image },
   );
