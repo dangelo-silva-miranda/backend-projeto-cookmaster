@@ -87,7 +87,7 @@ const updateRecipeById = async ({ id, name, ingredients, preparation, user }) =>
     { id, name, ingredients, preparation },
   );
   
-  return { status: StatusCodes.OK, message: { recipe } };  
+  return { status: StatusCodes.OK, message: recipe };  
 };
 
 module.exports = {
