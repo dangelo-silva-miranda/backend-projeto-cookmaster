@@ -14,9 +14,14 @@ const createRecipe = async ({ name, ingredients, preparation, userId, image }) =
     }))
   );
 
+  /*
+    Material consultado sobre projection
+    https://stackoverflow.com/a/50802269
+    http://mongodb.github.io/node-mongodb-native/3.5/api/Collection.html#find
+  */
 const getAllRecipes = async () => connection.getConnection()
   .then((db) => db.collection('recipes')
-    .find().toArray());
+    .find({}, { projection: { image: 0 } }).toArray());
 
 module.exports = {
   createRecipe,
