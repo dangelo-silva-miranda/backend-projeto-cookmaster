@@ -2,7 +2,7 @@ const express = require('express');
 
 const recipeController = require('../controllers/recipeController');
 const { validateName, validateIngredients, 
-  validatePreparation, validateJWT } = require('../middlewares/validations');
+  validatePreparation, validateJWT, validateAuth } = require('../middlewares/validations');
 
 const recipeRouter = express.Router();
 
@@ -13,6 +13,9 @@ recipeRouter.post('/',
 recipeRouter.get('/', recipeController.getAllRecipes);
 
 recipeRouter.get('/:id', recipeController.getRecipeById);
+
+recipeRouter.put('/:id', [validateAuth, validateJWT, validateName, 
+  validateIngredients, validatePreparation], recipeController.updateRecipeById);
 
 module.exports = {
   recipeRouter,
