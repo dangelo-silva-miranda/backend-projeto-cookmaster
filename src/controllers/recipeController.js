@@ -36,9 +36,25 @@ const updateRecipeById = async (req, res) => {
   return res.status(status).json(message);
 };
 
+const removeRecipeById = async (req, res) => {
+  const { id } = req.params;
+  const { user } = req;
+
+  const { status, message } = await recipeService.removeRecipeById(
+    { id, user },
+  );
+  
+  if (!message) {
+    return res.status(status).json(message);
+  }
+  
+  return res.status(status).send();
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
+  removeRecipeById,
 };
