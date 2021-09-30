@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const { MessageCodes, SECRET } = require('../helpers/constants');
+const recipeService = require('../services/recipeService');
 
 const validateName = (req, res, next) => {
   const { name = '' } = req.body;
@@ -125,6 +126,32 @@ const validateJWT = async (req, res, next) => {
   }
 };
 
+const userExists = async (req, res, next) => {
+  const { user } = req;
+  
+  // Não existe usuário no DB com essas informações
+  if (!await recipeService.userExists(user)) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: 'non-existent user.',
+    });
+  }
+  
+  next();  
+};
+
+const isUserAuthorized = async (req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+  
+  if (!await recipeService.isUserAuthorized({ id, user })) {
+    return res.status(StatusCodes.FORBIDDEN).json({ 
+      message: 'not authorized to perform the requested action', 
+    });
+  }
+  
+  next();
+};
+
 module.exports = {
   validateName,
   validateIngredients,
@@ -135,4 +162,6 @@ module.exports = {
   validateLoginPassword,
   validateAuth,
   validateJWT,
+  userExists,
+  isUserAuthorized,
 };
