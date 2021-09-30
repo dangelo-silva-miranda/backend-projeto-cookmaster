@@ -112,10 +112,24 @@ const removeRecipeById = async ({ id, user }) => {
   return { status: StatusCodes.NO_CONTENT }; 
 };
 
+const updateRecipeImageById = async ({ id, image }) => {
+  const recipe = await recipeModel.updateRecipeImageById({ id, image });
+  return { status: StatusCodes.OK, message: recipe };  
+};
+
+const isUserAuthorized = async ({ id, user: { id: userId, role } }) => {
+  const isRecipeFromUser = await recipeModel.isRecipeFromUser({ id, userId });
+  
+  return role === 'admin' || isRecipeFromUser;
+};
+
 module.exports = {
   createRecipe,
   getAllRecipes,
   getRecipeById,
   updateRecipeById,
   removeRecipeById,
+  updateRecipeImageById,
+  userExists,
+  isUserAuthorized,
 };
