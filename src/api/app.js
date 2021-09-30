@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const { IMAGES_PATH } = require('../helpers/constants');
 
 const { loginRouter } = require('../routers/loginRouter');
 const { recipeRouter } = require('../routers/recipeRouter');
@@ -26,5 +27,10 @@ app.use('/login', loginRouter);
 
 /* Todas as rotas com /recipes/<alguma-coisa> entram aqui e vão para o roteador */
 app.use('/recipes', recipeRouter);
+
+// /images é o caminho/end-point da API onde as imagens estarão disponíveis
+// path.join(__dirname, '..', 'uploads') é o caminho da pasta onde o multer deve salvar suas imagens ao realizar o upload
+// a pasta `uploads` está em `./src/uploads` e não deve ser renomeada ou removida (assim como o arquivo `ratinho.jpg`)
+app.use('/images', express.static(IMAGES_PATH));
 
 module.exports = app;
